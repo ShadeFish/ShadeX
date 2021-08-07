@@ -42,17 +42,13 @@ namespace ShadeX_Client
                 config.SetValue("device_id", device_id);
                 Console.WriteLine("New Device Created!");
             }
-            else
+
+            api.UpdateOnlineStatusTime(config.GetValue("device_id"));
+            api.RequestCommand("test_command_for_all2");
+            while (true)
             {
-                api.UpdateOnlineStatusTime(config.GetValue("device_id"));
 
-                while(true)
-                {
-
-                }
             }
-
-            
         }
 
        
