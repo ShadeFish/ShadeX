@@ -50,6 +50,11 @@ namespace ShadeX_Core
         public delegate void DelegateLoseConnection();
         public event DelegateLoseConnection LoseConnection;
 
+        public string GetNextCommand(string device_id)
+        {
+            return null;        
+        }
+
         /* UPDATE LAST SEEN INFO */
         public bool UpdateOnlineStatusTime(string device_id)
         {

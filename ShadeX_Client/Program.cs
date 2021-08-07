@@ -45,6 +45,11 @@ namespace ShadeX_Client
             else
             {
                 api.UpdateOnlineStatusTime(config.GetValue("device_id"));
+
+                while(true)
+                {
+
+                }
             }
 
             
