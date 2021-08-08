@@ -10,10 +10,12 @@ namespace ShadeX_Core
     public partial class ShadeApi
     {
         private string adress;
+        private ConnectionHandler connectionHandler;
         
-        public ShadeApi(string adress)
+        public ShadeApi(ConnectionHandler connectionHandler)
         {
-            this.adress = adress;
+            this.connectionHandler = connectionHandler;
+            this.adress = connectionHandler.adress;
         }
 
         /* GET NEXT COMMAND TO EXECUTE */
@@ -36,44 +38,47 @@ namespace ShadeX_Core
         {
             List<DeviceCommand> deviceCommands = new List<DeviceCommand>();
 
-            string res = Request(adress + "/command/", new NameValueCollection() {
+            string res = connectionHandler.Request(adress + "/command/", new NameValueCollection() {
                 { "action", "get_device_all_commands" },
                 { "device_id", device_id }
             });
 
-            string[] command = res.Split(',');
-            for (int i =0;i < command.Length - 1;i++)
+            if(res != null)
             {
-                string[] partedCommand = command[i].Split(':');
-                if (partedCommand.Length > 1 && partedCommand[0] != string.Empty)
+                string[] command = res.Split(',');
+                for (int i = 0; i < command.Length - 1; i++)
                 {
-                    deviceCommands.Add(new DeviceCommand(partedCommand[0], partedCommand[1]));
-                }
-                else
-                {
-                    deviceCommands.Add(new DeviceCommand(command[i].Trim(':'), string.Empty));
+                    string[] partedCommand = command[i].Split(':');
+                    if (partedCommand.Length > 1 && partedCommand[0] != string.Empty)
+                    {
+                        deviceCommands.Add(new DeviceCommand(partedCommand[0], partedCommand[1]));
+                    }
+                    else
+                    {
+                        deviceCommands.Add(new DeviceCommand(command[i].Trim(':'), string.Empty));
+                    }
                 }
             }
+
             return deviceCommands.ToArray();
         }
 
         /* REQUEST COMMAND TO SINGLE DEVICE */
         public bool RequestCommand(string device_id, string command)
         {
-            string res = Request(adress + "/command/", new NameValueCollection() {
+            string res = connectionHandler.Request(adress + "/command/", new NameValueCollection() {
                 { "action", "request_command_to_device" },
                 { "command_request", command},
                 { "device_id", device_id }
             });
 
-            Console.WriteLine(res);
             return (res != null) && (res == "True");
         }
 
         /* REQUEST COMMAND TO ALL DEVICES */
         public bool RequestCommand(string command)
         {
-            string res = Request(adress + "/command/", new NameValueCollection() {
+            string res = connectionHandler.Request(adress + "/command/", new NameValueCollection() {
                 { "action", "request_command_to_all_devices" },
                 { "command_request", command}
             });
@@ -83,7 +88,7 @@ namespace ShadeX_Core
         /* UPDATE LAST SEEN INFO */
         public bool UpdateOnlineStatusTime(string device_id)
         {
-            string res = Request(adress + "/device/", new NameValueCollection() {
+            string res = connectionHandler.Request(adress + "/device/", new NameValueCollection() {
                 { "action","set_last_seen" },
                 { "device_id", device_id },
                 { "last_seen", DateTime.Now.ToString() }
@@ -95,7 +100,7 @@ namespace ShadeX_Core
         /* CREATING NEW DEVICE */
         public bool CreateNewDevice(string device_id)
         {
-            string res = Request(adress + "/device/",new NameValueCollection() {
+            string res = connectionHandler.Request(adress + "/device/",new NameValueCollection() {
                 { "action","create_new_device"},
                 { "device_id", device_id},
                 { "machine_name", Environment.MachineName },
@@ -105,25 +110,6 @@ namespace ShadeX_Core
             });
 
             return (res != null) && (res == "True");
-        }
-
-        /* MAKE REQUEST TO HTTP SERVER */
-        protected string Request(string adress,NameValueCollection args)
-        {
-            using(WebClient client = new WebClient())
-            {
-                try
-                {
-                    byte[] response_ = client.UploadValues(adress,"POST", args);
-                    string text_response = Encoding.UTF8.GetString(response_);
-                   // Console.WriteLine(text_response);
-                    return text_response;
-                }
-                catch
-                {
-                    return null;
-                }
-            }
         }
     }
 }

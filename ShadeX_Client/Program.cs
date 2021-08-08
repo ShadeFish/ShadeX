@@ -17,25 +17,24 @@ namespace ShadeX_Client
         static void Main(string[] args)
         {
             connectionHandler = new ConnectionHandler(@"http://localhost/");
-            connectionHandler.GetConnection += Api_GetConnection;
-            connectionHandler.LoseConnection += Api_LoseConnection;
+            connectionHandler.GetConnection += connectionHandler_GetConnection;
+            connectionHandler.LoseConnection += connectionHandler_LoseConnection;
 
-            api = new ShadeApi(@"http://localhost/");
-
+            api = new ShadeApi(connectionHandler);
             config = new ConfigFile("config.cfg");
-
-            
 
         }
 
-        private static void Api_LoseConnection()
+        private static void connectionHandler_LoseConnection()
         {
             Console.WriteLine("Disconnected!");
         }
 
-        private static void Api_GetConnection()
+        private static void connectionHandler_GetConnection()
         {
-            if(device_id == null)
+            Console.WriteLine("Connected to server. ");
+
+            if (device_id == null)
             {
                 device_id = config.GetValue("device_id");
                 if (device_id == string.Empty)
@@ -47,12 +46,21 @@ namespace ShadeX_Client
                     config.SetValue("device_id", device_id);
                     Console.WriteLine("New Device Created: " + device_id);
                 }
-                else
-                {
-                    Console.WriteLine("Connected: " + device_id);
-                }
             }
-            api.UpdateOnlineStatusTime(device_id);
+            api.UpdateOnlineStatusTime(device_id);  
+
+            new Thread(delegate() {
+                while (connectionHandler.connected)
+                {
+                    DeviceCommand command = api.GetCommandToExecute(device_id);
+
+                    if(command != DeviceCommand.Empty)
+                    {
+                        Console.WriteLine("Next COmmand : " + command.command_request);
+                    }
+                    Thread.Sleep(1000);
+                }
+            }).Start();
         }
     }
 }
