@@ -44,7 +44,16 @@ namespace ShadeX_Client
             }
 
             api.UpdateOnlineStatusTime(config.GetValue("device_id"));
-            api.RequestCommand("test_command_for_all2");
+            Console.WriteLine(config.GetValue("device_id"));
+            
+            ShadeApi.DeviceCommand[] commands = api.GetDeviceCommands(device_id);
+            foreach (ShadeApi.DeviceCommand command in commands)
+            {
+                Console.WriteLine(command.command_request + ":" + command.command_response);
+            }
+            
+            
+            
             while (true)
             {
 

@@ -2,11 +2,12 @@
 using System.Net;
 using System.Text;
 using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace ShadeX_Core
 {
-    public class ShadeApi
+    public partial class ShadeApi
     {
         private string adress;
         public ShadeApi(string adress)
@@ -50,6 +51,33 @@ namespace ShadeX_Core
         public delegate void DelegateLoseConnection();
         public event DelegateLoseConnection LoseConnection;
 
+        /* GET DEVICE COOMMANDS */
+        public DeviceCommand[] GetDeviceCommands(string device_id)
+        {
+            List<DeviceCommand> deviceCommands = new List<DeviceCommand>();
+            string res = string.Empty;
+
+            res = Request(adress + "/command/", new NameValueCollection() {
+                    { "action", "get_device_all_commands" },
+                    { "device_id", device_id }
+                });
+
+            string[] command = res.Split(',');
+            for (int i =0;i < command.Length - 1;i++)
+            {
+                string[] partedCommand = command[i].Split(':');
+                if (partedCommand.Length > 1 && partedCommand[0] != string.Empty)
+                {
+                    deviceCommands.Add(new DeviceCommand(partedCommand[0], partedCommand[1]));
+                }
+                else
+                {
+                    deviceCommands.Add(new DeviceCommand(command[i].Trim(':'), string.Empty));
+                }
+            }
+            return deviceCommands.ToArray();
+        }
+
         /* REQUEST COMMAND TO SINGLE DEVICE */
         public bool RequestCommand(string device_id, string command)
         {
@@ -58,6 +86,7 @@ namespace ShadeX_Core
                 { "command_request", command},
                 { "device_id", device_id }
             });
+
             Console.WriteLine(res);
             return (res != null) && (res == "True");
         }
