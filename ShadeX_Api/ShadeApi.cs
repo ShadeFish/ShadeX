@@ -10,57 +10,36 @@ namespace ShadeX_Core
     public partial class ShadeApi
     {
         private string adress;
+        
         public ShadeApi(string adress)
         {
             this.adress = adress;
-
-            /* Connection Handler */
-            new Thread(delegate () {
-                bool wasConnected = false;
-                while(true)
-                {
-                    if (Request(adress,new NameValueCollection() { { "action","test" } }) == "True")
-                    {
-                        if(!wasConnected)
-                        {
-                            GetConnection();
-                            wasConnected = true;
-                            
-                        }
-                        Thread.Sleep(10000);
-                    }
-                    else
-                    {
-                        if(wasConnected)
-                        {
-                            LoseConnection();
-                            wasConnected = false;
-                            
-                        }
-                        Thread.Sleep(1000);
-                    }
-                    
-                }
-            }).Start();
         }
 
-        /*             CONNECTION EVENTS              */
-        public delegate void DelegateConnected();
-        public event DelegateConnected GetConnection;
+        /* GET NEXT COMMAND TO EXECUTE */
+        public DeviceCommand GetCommandToExecute(string device_id)
+        {
+            DeviceCommand deviceCommand = DeviceCommand.Empty;
+            foreach (DeviceCommand cmd in GetDeviceCommands(device_id))
+            {
+                if (cmd.command_response == string.Empty)
+                {
+                    deviceCommand = cmd;
+                }
+            }
 
-        public delegate void DelegateLoseConnection();
-        public event DelegateLoseConnection LoseConnection;
+            return deviceCommand;
+        }
 
         /* GET DEVICE COOMMANDS */
         public DeviceCommand[] GetDeviceCommands(string device_id)
         {
             List<DeviceCommand> deviceCommands = new List<DeviceCommand>();
-            string res = string.Empty;
 
-            res = Request(adress + "/command/", new NameValueCollection() {
-                    { "action", "get_device_all_commands" },
-                    { "device_id", device_id }
-                });
+            string res = Request(adress + "/command/", new NameValueCollection() {
+                { "action", "get_device_all_commands" },
+                { "device_id", device_id }
+            });
 
             string[] command = res.Split(',');
             for (int i =0;i < command.Length - 1;i++)
@@ -129,7 +108,7 @@ namespace ShadeX_Core
         }
 
         /* MAKE REQUEST TO HTTP SERVER */
-        private string Request(string adress,NameValueCollection args)
+        protected string Request(string adress,NameValueCollection args)
         {
             using(WebClient client = new WebClient())
             {

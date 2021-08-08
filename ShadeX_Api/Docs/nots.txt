@@ -1,2 +1,3 @@
 ﻿sprawdzanie aktualizacji przed wszystkim innym i aktualizowanie w razie gdyby trzeba bylo jakis blad naprawic
 podzielenie api tak samo jak po stronie servera main,device,command albo podobnie wazne zyby wszystko nie bylo w jednym miejscu
+pobieranie adresu api i ppodobme z pliku konfiguracyj9nego
