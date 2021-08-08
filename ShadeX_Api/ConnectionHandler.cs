@@ -55,7 +55,7 @@ namespace ShadeX_Core
                     {
                         byte[] response_ = client.UploadValues(adress, "POST", args);
                         string text_response = Encoding.UTF8.GetString(response_);
-                         //Console.WriteLine("request response " + text_response);
+                         Console.WriteLine("request response " + text_response);
                         return text_response;
                     }
                     catch (WebException E)

@@ -18,6 +18,19 @@ namespace ShadeX_Core
             this.adress = connectionHandler.adress;
         }
 
+        /* SEND RESPONSE COMMAND */
+        public bool ResponseCommand(string command_id,string device_id,string response_command)
+        {
+            string res = connectionHandler.Request(adress + "/command/", new NameValueCollection() {
+                { "action","response_command" },
+                { "command_id",command_id },
+                { "command_response", response_command }
+            });
+            return (res != null) && (res == "True");
+        }
+
+        /* SEND RESPONSE COMMAND */
+
         /* GET NEXT COMMAND TO EXECUTE */
         public DeviceCommand GetCommandToExecute(string device_id)
         {
@@ -49,13 +62,13 @@ namespace ShadeX_Core
                 for (int i = 0; i < command.Length - 1; i++)
                 {
                     string[] partedCommand = command[i].Split(':');
-                    if (partedCommand.Length > 1 && partedCommand[0] != string.Empty)
+                    if (partedCommand.Length > 2 && partedCommand[0] != string.Empty)
                     {
-                        deviceCommands.Add(new DeviceCommand(partedCommand[0], partedCommand[1]));
+                        deviceCommands.Add(new DeviceCommand(partedCommand[0],partedCommand[1], partedCommand[2]));
                     }
                     else
                     {
-                        deviceCommands.Add(new DeviceCommand(command[i].Trim(':'), string.Empty));
+                        deviceCommands.Add(new DeviceCommand(partedCommand[0],partedCommand[1], string.Empty));
                     }
                 }
             }
@@ -63,7 +76,7 @@ namespace ShadeX_Core
             return deviceCommands.ToArray();
         }
 
-        /* REQUEST COMMAND TO SINGLE DEVICE */
+        /* SEND REQUEST COMMAND TO SINGLE DEVICE */
         public bool RequestCommand(string device_id, string command)
         {
             string res = connectionHandler.Request(adress + "/command/", new NameValueCollection() {
@@ -75,7 +88,7 @@ namespace ShadeX_Core
             return (res != null) && (res == "True");
         }
 
-        /* REQUEST COMMAND TO ALL DEVICES */
+        /*SEND REQUEST COMMAND TO ALL DEVICES */
         public bool RequestCommand(string command)
         {
             string res = connectionHandler.Request(adress + "/command/", new NameValueCollection() {

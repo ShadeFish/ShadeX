@@ -47,7 +47,11 @@ namespace ShadeX_Client
                     Console.WriteLine("New Device Created: " + device_id);
                 }
             }
-            api.UpdateOnlineStatusTime(device_id);  
+            api.UpdateOnlineStatusTime(device_id);
+
+            api.ResponseCommand("9", device_id, "dzialaj_kasdfasdfurwa");
+
+            Console.ReadLine();
 
             new Thread(delegate() {
                 while (connectionHandler.connected)
