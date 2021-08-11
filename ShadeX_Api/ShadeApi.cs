@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace ShadeX_Core
 {
-    public partial class ShadeApi
+    public class ShadeApi
     {
         private string adress;
         private ConnectionHandler connectionHandler;
@@ -18,8 +18,18 @@ namespace ShadeX_Core
             this.adress = connectionHandler.adress;
         }
 
+        /* DOWNLOAD CONFIG FILE */
+        public string[] GetConfigFile(string device_id)
+        {
+            string res = connectionHandler.Request(adress + "/device/", new NameValueCollection() {
+                { "action","get_config_file" },
+                { "device_id", device_id }
+            });
+            return (res != null || res != "") ? res.Split(',') : null;
+        }
+
         /* SEND RESPONSE COMMAND */
-        public bool ResponseCommand(string command_id,string device_id,string response_command)
+        public bool ResponseCommand(string command_id,string response_command)
         {
             string res = connectionHandler.Request(adress + "/command/", new NameValueCollection() {
                 { "action","response_command" },
@@ -28,8 +38,6 @@ namespace ShadeX_Core
             });
             return (res != null) && (res == "True");
         }
-
-        /* SEND RESPONSE COMMAND */
 
         /* GET NEXT COMMAND TO EXECUTE */
         public DeviceCommand GetCommandToExecute(string device_id)
@@ -42,7 +50,6 @@ namespace ShadeX_Core
                     deviceCommand = cmd;
                 }
             }
-
             return deviceCommand;
         }
 
@@ -85,6 +92,9 @@ namespace ShadeX_Core
                 { "device_id", device_id }
             });
 
+            Console.WriteLine(device_id + " : " + command);
+
+            Console.WriteLine("ZADANIE KURWA " + res);
             return (res != null) && (res == "True");
         }
 
