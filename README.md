@@ -1,6 +1,6 @@
 ShadeX - Cryptojacking
 #### The project is still in its preliminary phase.
-=============
+
 
 # Description
 #####  ShadeX is a cryptojacking application project. The application is made for research purposes only.
