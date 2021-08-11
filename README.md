@@ -7,7 +7,7 @@ ShadeX - Cryptojacking
 
 
 # ShadeX_Client
-#####ShadeX_Client is a client that copies cryptocurrency monero. Why monero? because it is completely anonymous and censorship-resistant. This makes Monero a favorite of the dark net and cryptojacking hackers.The application communicates with ShadeX_Server via the http server why? honestly, I don't know, it was easy for me to write an api to communicate with a server that is based on free hosting with sql database
+##### ShadeX_Client is a client that copies cryptocurrency monero. Why monero? because it is completely anonymous and censorship-resistant. This makes Monero a favorite of the dark net and cryptojacking hackers.The application communicates with ShadeX_Server via the http server why? honestly, I don't know, it was easy for me to write an api to communicate with a server that is based on free hosting with sql database
 
 # ShadeX_Server
 ##### ShadeX_Server is used to handle infected computers, I can change the mining parameters and adjust the configuration appropriate to each client or after pressing a few buttons change the type of cryptocurrency to mine (there is no such function yet, but this is the plan). Communication takes place via the http server using POST requests.
