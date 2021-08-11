@@ -1,10 +1,6 @@
 ShadeX - Cryptojacking
 =============
 
-**Table of Contents**
-
-[TOCM]
-
 # Description
 #####  ShadeX is a cryptojacking application project. The application is made for research purposes only.
 
