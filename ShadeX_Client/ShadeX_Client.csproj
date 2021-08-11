@@ -36,8 +36,12 @@
     <StartupObject>ShadeX_Client.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Colorful.Console, Version=1.2.15.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\ShadeX\packages\Colorful.Console.1.2.15\lib\net461\Colorful.Console.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShadeX_Api\ShadeX_Core.csproj">

