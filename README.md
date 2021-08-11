@@ -16,6 +16,6 @@ ShadeX - Cryptojacking
 ##### http server is used for communication and data storage using simple php scripts and maintenance of sql database. I hate php
 
 # Any idea?
-#####Jako że jest to projekt służący do nauki chetnie dowiedziec sie co robie nie tak albo co mógłbym poprawic.Moze ktos ma jakies pomysły na usprawnienie tego projektu.
+##### As this is a learning project I would love to know what I am doing wrong or what I could improve. Maybe someone has some ideas for improving this project.
 
 
