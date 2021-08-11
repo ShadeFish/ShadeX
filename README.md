@@ -1,4 +1,5 @@
 ShadeX - Cryptojacking
+#### The project is still in its preliminary phase.
 =============
 
 # Description
