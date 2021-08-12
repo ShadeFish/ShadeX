@@ -124,11 +124,13 @@ namespace ShadeX_Client
                         }
                     }
 
+                    /*
                     DeviceCommand command = api.GetCommandToExecute(device_id);
                     if(command != DeviceCommand.Empty)
                     {
                         // executing next available command
                     }
+                    */
                     Thread.Sleep(1000);
                 }
             }).Start();

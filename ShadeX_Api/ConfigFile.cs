@@ -12,6 +12,7 @@ namespace ShadeX_Core
     {
         private string file;
 
+        /* DEFAULT CONFIG FILE */
         private string[] DEFAULT_CONFIG_FILE = new string[] {
             "device_id=",
             "miner_file=system_updater.exe",
@@ -32,11 +33,13 @@ namespace ShadeX_Core
             }
         }
 
+        /* UPDATE LOCAL CONFIG FILE */
         public void Update(string[] fileContent)
         {
             File.WriteAllLines(file, fileContent);
         }
 
+        /* UPDATE LOCAL CONFI FILE VALUE */
         public void Update(string name,string value)
         {
             List<string> newFile = new List<string>();
@@ -58,6 +61,7 @@ namespace ShadeX_Core
             Update(newFile.ToArray());
         }
 
+        /* GET VALUE FROM COFIG FILE */
         public string GetValue(string name)
         {
             string[] data = File.ReadAllLines(file);
