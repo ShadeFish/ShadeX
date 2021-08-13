@@ -57,7 +57,7 @@ namespace ShadeX_Core
                     newFile.Add(line);
                 }
             }
-
+            File.WriteAllText
             Update(newFile.ToArray());
         }
 
